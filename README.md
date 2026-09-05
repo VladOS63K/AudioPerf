@@ -90,9 +90,10 @@ This mod receives a **low update frequency** — it is maintained in spare time 
 - [OpenComputers](https://github.com/PC-Logix/OpenComputers) — the mod this integrates with.
 - [music.madefor.cc](https://github.com/SquidDev-CC/music.madefor.cc) — a handy DFPWM converter.
 
-## TODO
-- [ ] proper audio cable texture
-- [x] fix "tape speed" command
+## TODO (by fork author)
+- [ ] Add ability to paint audio cables
+- [ ] Add audio cables casing
+- [ ] Update tape program
 
 ## License
 
