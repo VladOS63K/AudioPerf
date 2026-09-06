@@ -20,7 +20,7 @@ public class ItemTape extends Item implements IItemTapeStorage {
     public static final int L_MINUTE = 4096 * 60;
 
     public static final int TAPE_COUNT = 10;
-    public static final int[] DEFAULT_LENGTHS = {4, 8, 16, 32, 64, 2, 6, 16, 128, 128};
+    public static final int[] DEFAULT_LENGTHS = {2, 4, 6, 8, 16, 32, 64, 128};
 
     private final int[] sizes;
 

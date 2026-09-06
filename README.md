@@ -94,6 +94,7 @@ This mod receives a **low update frequency** — it is maintained in spare time 
 - [ ] Add ability to paint audio cables
 - [ ] Add audio cables casing
 - [ ] Update tape program
+- [ ] Fix audio cable texture
 
 ## License
 
