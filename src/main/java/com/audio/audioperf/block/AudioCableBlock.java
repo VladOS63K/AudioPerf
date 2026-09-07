@@ -122,7 +122,11 @@ public class AudioCableBlock extends Block implements EntityBlock {
                     if (!player.getAbilities().instabuild) {
                         stack.shrink(1);
                     }
-                    level.sendBlockUpdated(pos, state, state, 3);
+                    if (level instanceof net.minecraft.server.level.ServerLevel serverLevel) {
+                        net.neoforged.neoforge.network.PacketDistributor.sendToPlayersTrackingChunk(
+                                serverLevel, new net.minecraft.world.level.ChunkPos(pos),
+                                new com.audio.audioperf.network.AudioCableColorPayload(pos, color));
+                    }
                 }
             }
             return ItemInteractionResult.sidedSuccess(level.isClientSide);
