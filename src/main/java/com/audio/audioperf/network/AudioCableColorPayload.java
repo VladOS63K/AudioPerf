@@ -31,7 +31,10 @@ public record AudioCableColorPayload(BlockPos pos, int color) implements CustomP
             var level = context.player().level();
             if (level.getBlockEntity(payload.pos) instanceof TileAudioCable cable) {
                 cable.setColor(payload.color);
-                level.markBlockRangeForRenderUpdate(payload.pos, payload.pos);
+                if (level instanceof net.minecraft.client.level.ClientLevel clientLevel) {
+                    clientLevel.setBlocksDirty(payload.pos.getX(), payload.pos.getY(), payload.pos.getZ(),
+                            payload.pos.getX(), payload.pos.getY(), payload.pos.getZ());
+                }
             }
         });
     }
