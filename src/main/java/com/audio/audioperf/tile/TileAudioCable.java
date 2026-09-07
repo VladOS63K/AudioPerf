@@ -116,6 +116,21 @@ public class TileAudioCable extends BlockEntity implements IAudioReceiver {
     public void setColor(int color) { this.color = color; setChanged(); }
 
     @Override
+    public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
+        CompoundTag tag = super.getUpdateTag(registries);
+        tag.putInt("color", color);
+        return tag;
+    }
+
+    @Override
+    public void handleUpdateTag(CompoundTag tag, HolderLookup.Provider registries) {
+        super.handleUpdateTag(tag, registries);
+        if (tag.contains("color")) {
+            color = tag.getInt("color");
+        }
+    }
+
+    @Override
     protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.loadAdditional(tag, registries);
         if (tag.contains("color")) {
