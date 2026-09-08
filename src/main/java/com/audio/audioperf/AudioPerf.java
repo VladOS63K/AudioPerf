@@ -143,7 +143,7 @@ public class AudioPerf {
                 (be, side) -> (li.cil.oc.api.network.Environment) be);
     }
 
-    private void registerLootDisks(final net.neoforged.neoforge.event.tick.ServerTickEvent.Pre event) {
+    private void registerLootDisks(final net.neoforged.neoforge.event.tick.ClientTickEvent.Pre event) {
         if (li.cil.oc.api.API.items != null) {
             net.neoforged.neoforge.common.NeoForge.EVENT_BUS.unregister(this);
             registerTapeLootDisk();
