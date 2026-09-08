@@ -8,6 +8,7 @@ import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.ClientPlayerNetworkEvent;
+import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.neoforged.neoforge.common.NeoForge;
@@ -20,6 +21,7 @@ public class AudioPerfClient {
         modEventBus.addListener(this::onRegisterScreens);
         modEventBus.addListener(this::onRegisterBlockColors);
         NeoForge.EVENT_BUS.addListener(this::onClientDisconnect);
+        NeoForge.EVENT_BUS.addListener(this::registerLootDisks);
     }
 
     private void onClientSetup(FMLClientSetupEvent event) {
@@ -46,5 +48,24 @@ public class AudioPerfClient {
         if (handler != null) {
             handler.getPlaybackManager().removeAll();
         }
+    }
+
+    private void registerLootDisks(final ClientTickEvent.Pre event) {
+        if (li.cil.oc.api.API.items != null) {
+            NeoForge.EVENT_BUS.unregister(this);
+            registerTapeLootDisk();
+        }
+    }
+
+    private void registerTapeLootDisk() {
+        net.minecraft.resources.ResourceLocation lootPath = net.minecraft.resources.ResourceLocation.fromNamespaceAndPath(AudioPerf.MODID, "loot/tape");
+        li.cil.oc.api.API.items.registerFloppy(
+                "tape",
+                "tape",
+                lootPath,
+                net.minecraft.world.item.DyeColor.WHITE,
+                () -> li.cil.oc.api.FileSystem.fromResource(lootPath),
+                false
+        );
     }
 }
