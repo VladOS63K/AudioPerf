@@ -142,6 +142,10 @@ public class AudioPerf {
                 (be, side) -> (li.cil.oc.api.network.Environment) be);
     }
 
+    private void onServerStarting(net.neoforged.neoforge.event.server.ServerStartingEvent event) {
+        serverInstance = event.getServer();
+    }
+
     private void onServerStopping(net.neoforged.neoforge.event.server.ServerStoppingEvent event) {
         if (audioManager != null) {
             audioManager.removeAll();
