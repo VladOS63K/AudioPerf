@@ -21,6 +21,8 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
@@ -113,10 +115,17 @@ public class AudioCableBlock extends Block implements EntityBlock {
     }
 
     @Override
+    protected boolean canBeReplaced(BlockState state, Fluid fluid) {
+        return true;
+    }
+
+    @Override
     protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
         if (stack.getItem() instanceof DyeItem dye && level.getBlockEntity(pos) instanceof TileAudioCable cable) {
             if (!level.isClientSide) {
-                int color = dye.getDyeColor().getTextureDiffuseColor() & 0xFFFFFF;
+                int color = dye.getDyeColor() == net.minecraft.world.item.DyeColor.WHITE
+                        ? 0xCCCCCC
+                        : dye.getDyeColor().getTextureDiffuseColor() & 0xFFFFFF;
                 if (cable.getColor() != color) {
                     cable.setColor(color);
                     cable.refreshConnections();
