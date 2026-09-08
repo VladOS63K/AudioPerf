@@ -30,30 +30,34 @@ public record AudioCableColorPayload(BlockPos pos, int color) implements CustomP
             buf -> new AudioCableColorPayload(buf.readBlockPos(), buf.readInt())
     );
 
-    private static final Method SET_BLOCKS_DIRTY;
-    static {
-        try {
-            SET_BLOCKS_DIRTY = Class.forName("net.minecraft.client.level.ClientLevel")
-                    .getMethod("setBlocksDirty", int.class, int.class, int.class, int.class, int.class, int.class);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
+    private static Method setBlocksDirty;
 
     public static void handle(AudioCableColorPayload payload, IPayloadContext context) {
         context.enqueueWork(() -> {
             Level level = context.player().level();
             if (level.getBlockEntity(payload.pos) instanceof TileAudioCable cable) {
                 cable.setColor(payload.color);
-                if (SET_BLOCKS_DIRTY.getDeclaringClass().isInstance(level)) {
-                    try {
-                        SET_BLOCKS_DIRTY.invoke(level,
-                                payload.pos.getX(), payload.pos.getY(), payload.pos.getZ(),
-                                payload.pos.getX(), payload.pos.getY(), payload.pos.getZ());
-                    } catch (Exception ignored) {
-                    }
+                if (level.isClientSide) {
+                    forceRerender(level, payload.pos);
                 }
             }
         });
+    }
+
+    private static void forceRerender(Level level, BlockPos pos) {
+        if (setBlocksDirty == null) {
+            try {
+                setBlocksDirty = Class.forName("net.minecraft.client.level.ClientLevel")
+                        .getMethod("setBlocksDirty", int.class, int.class, int.class, int.class, int.class, int.class);
+            } catch (Exception e) {
+                return;
+            }
+        }
+        try {
+            setBlocksDirty.invoke(level,
+                    pos.getX(), pos.getY(), pos.getZ(),
+                    pos.getX(), pos.getY(), pos.getZ());
+        } catch (Exception ignored) {
+        }
     }
 }
