@@ -8,6 +8,7 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 import java.lang.reflect.Method;
@@ -47,16 +48,15 @@ public record AudioCableColorPayload(BlockPos pos, int color) implements CustomP
     private static void forceRerender(Level level, BlockPos pos) {
         if (setBlocksDirty == null) {
             try {
-                setBlocksDirty = Class.forName("net.minecraft.client.level.ClientLevel")
-                        .getMethod("setBlocksDirty", int.class, int.class, int.class, int.class, int.class, int.class);
+                setBlocksDirty = Class.forName("net.minecraft.client.multiplayer.ClientLevel")
+                        .getMethod("setBlocksDirty", BlockPos.class, BlockState.class, BlockState.class);
             } catch (Exception e) {
                 return;
             }
         }
         try {
-            setBlocksDirty.invoke(level,
-                    pos.getX(), pos.getY(), pos.getZ(),
-                    pos.getX(), pos.getY(), pos.getZ());
+            BlockState state = level.getBlockState(pos);
+            setBlocksDirty.invoke(level, pos, state, state);
         } catch (Exception ignored) {
         }
     }

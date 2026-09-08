@@ -72,8 +72,8 @@ public class TileAudioCable extends BlockEntity implements IAudioReceiver {
         BlockPos neighborPos = worldPosition.relative(side);
         if (!level.isLoaded(neighborPos)) return false;
         BlockEntity neighbor = level.getBlockEntity(neighborPos);
-        if (neighbor instanceof TileAudioCable) {
-            return true;
+        if (neighbor instanceof TileAudioCable cable) {
+            return cable.getColor() == this.color;
         }
         if (neighbor instanceof IAudioConnection conn) {
             return conn.connectsAudio(side.getOpposite());
