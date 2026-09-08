@@ -119,6 +119,7 @@ public class AudioCableBlock extends Block implements EntityBlock {
                 int color = dye.getDyeColor().getTextureDiffuseColor() & 0xFFFFFF;
                 if (cable.getColor() != color) {
                     cable.setColor(color);
+                    cable.refreshConnections();
                     if (!player.getAbilities().instabuild) {
                         stack.shrink(1);
                     }

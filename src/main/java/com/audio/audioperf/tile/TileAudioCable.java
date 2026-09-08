@@ -39,6 +39,15 @@ public class TileAudioCable extends BlockEntity implements IAudioReceiver {
         updateShape();
     }
 
+    public void refreshConnections() {
+        if (level == null) return;
+        BlockState state = getBlockState();
+        BlockState newState = com.audio.audioperf.block.AudioCableBlock.getStateFor(state, this);
+        if (!newState.equals(state)) {
+            level.setBlock(worldPosition, newState, 2);
+        }
+    }
+
     private void updateShape() {
         VoxelShape shape = Shapes.box(CORE_MIN, CORE_MIN, CORE_MIN, CORE_MAX, CORE_MAX, CORE_MAX);
         for (Direction dir : Direction.values()) {

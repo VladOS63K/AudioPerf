@@ -38,6 +38,7 @@ public record AudioCableColorPayload(BlockPos pos, int color) implements CustomP
             Level level = context.player().level();
             if (level.getBlockEntity(payload.pos) instanceof TileAudioCable cable) {
                 cable.setColor(payload.color);
+                cable.refreshConnections();
                 if (level.isClientSide) {
                     forceRerender(level, payload.pos);
                 }
