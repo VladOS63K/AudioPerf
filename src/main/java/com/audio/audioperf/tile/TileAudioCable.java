@@ -41,6 +41,7 @@ public class TileAudioCable extends BlockEntity implements IAudioReceiver {
 
     public void refreshConnections() {
         if (level == null) return;
+        updateShape();
         BlockState state = getBlockState();
         BlockState newState = com.audio.audioperf.block.AudioCableBlock.getStateFor(state, this);
         if (!newState.equals(state)) {
@@ -71,7 +72,7 @@ public class TileAudioCable extends BlockEntity implements IAudioReceiver {
     }
 
     public VoxelShape getShape() {
-        if (cachedShape == null) updateShape();
+        updateShape();
         return cachedShape;
     }
 
